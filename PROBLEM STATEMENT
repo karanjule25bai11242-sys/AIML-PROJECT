@@ -1,0 +1,143 @@
+# Project Report: Unbeatable Tic‑Tac‑Toe AI
+
+## 1. Abstract
+
+This project presents an interactive command‑line Tic‑Tac‑Toe game where a human player competes against an artificial intelligence (AI). The AI employs the **Minimax decision algorithm with Alpha‑Beta pruning** to guarantee optimal moves, making it impossible to defeat. The game is implemented in Python, runs instantly, and provides a clean user interface with numbered board positions. This report details the problem definition, the design choices, the implementation of the AI, testing procedures, and the final outcomes.
+
+## 2. Introduction
+
+Tic‑Tac‑Toe is a classic two‑player game played on a 3×3 grid. While simple, it serves as an excellent problem for exploring adversarial search algorithms. The objective of this project is to develop an AI that always either wins or forces a draw, thereby demonstrating the principles of game theory and heuristic evaluation. The AI is built using the **Minimax algorithm**, which simulates all possible future moves assuming both players play optimally. To improve performance, **Alpha‑Beta pruning** is added to eliminate branches that cannot affect the final decision, resulting in fast move calculation.
+
+The final product is a terminal‑based game where the human (X) moves first, and the AI (O) responds instantly with its best move.
+
+## 3. Problem Statement
+
+Design and implement an AI for Tic‑Tac‑Toe that:
+
+- Plays optimally (never loses).
+- Responds within a fraction of a second.
+- Runs in a command‑line environment.
+- Validates user input and prevents illegal moves.
+- Clearly displays the board after each move and announces the result.
+
+## 4. Methodology
+
+### 4.1 Game Representation
+
+The board is represented as a list of 9 strings, each initially a space `" "`. Human moves are marked `"X"`, AI moves `"O"`. The indices 0–8 correspond to positions 1–9 as shown below:
+
+```
+0 | 1 | 2
+---------
+3 | 4 | 5
+---------
+6 | 7 | 8
+```
+
+This representation simplifies checking win conditions and generating available moves.
+
+### 4.2 AI Algorithm: Minimax with Alpha‑Beta Pruning
+
+The AI uses the **Minimax** algorithm, a recursive decision‑making method for two‑player zero‑sum games. The AI is the *maximizing* player (aims to win, score = +1), while the human is the *minimizing* player (aims to make the AI lose, score = –1). A draw yields 0.
+
+The algorithm explores the game tree to a depth where a terminal state is reached (win, loss, or draw). The evaluation function returns:
+
+- **+1** if the AI wins,
+- **–1** if the human wins,
+- **0** for a draw.
+
+**Alpha‑Beta pruning** is incorporated to cut off branches that are guaranteed to be worse than the current best alternative. This reduces the number of nodes explored, making the search faster without affecting the final decision.
+
+### 4.3 User Interface
+
+The game provides a numbered board (1–9) so the user can easily select a cell. After each move, the updated board is displayed. Input validation ensures that the user selects a valid, empty cell. The AI automatically calculates its move and prints the chosen cell number.
+
+## 5. Implementation
+
+The entire system is implemented in a single Python file `tictactoe.py` (approximately 120 lines). The code is organized into a class `TicTacToe` with the following key methods:
+
+| Method | Description |
+|--------|-------------|
+| `__init__()` | Initializes the board and player symbols. |
+| `print_board()` | Displays the current board with dividers. |
+| `available_moves()` | Returns a list of indices of empty cells. |
+| `make_move(position, player)` | Places a mark if the cell is empty. |
+| `check_winner()` | Checks rows, columns, and diagonals for three identical non‑empty marks. |
+| `is_full()` | Returns `True` if the board has no empty cells. |
+| `game_over()` | Returns `True` if a win or draw has occurred. |
+| `minimax(depth, is_maximizing, alpha, beta)` | Recursive minimax with alpha‑beta; returns a score. |
+| `ai_move()` | Calls minimax for each possible move and selects the one with the highest score. |
+| `play()` | Main game loop handling user input, AI moves, and result announcement. |
+
+The minimax function is the core of the AI. It recursively evaluates each possible move, switching between maximizing (AI) and minimizing (human) turns. Alpha‑beta pruning is implemented with the parameters `alpha` (best already explored for maximizer) and `beta` (best already explored for minimizer). When `beta ≤ alpha`, the remaining branches are ignored.
+
+## 6. Testing
+
+The game was tested through several scenarios:
+
+- **Correct move selection:** The AI always chooses the optimal move, e.g., taking the center or blocking a human’s winning threat.
+- **Edge cases:** The AI handles full‑board draws correctly, returning 0 and picking any remaining move.
+- **User input validation:** Non‑numeric entries, out‑of‑range numbers, and occupied cells are rejected with appropriate messages.
+- **Performance:** Even with the full game tree (up to 9! = 362,880 sequences), the AI responds instantly due to alpha‑beta pruning.
+
+A sample game session is shown below:
+
+```
+Welcome to Tic-Tac-Toe!
+You are X, AI is O. You go first.
+
+    |   |  
+  -----------
+    |   |  
+  -----------
+    |   |  
+
+Your turn (X). Enter a number (1-9): 5
+
+    |   |  
+  -----------
+    | X |  
+  -----------
+    |   |  
+
+AI (O) is thinking...
+AI (O) chooses 1.
+
+   O |   |  
+  -----------
+    | X |  
+  -----------
+    |   |  
+
+...
+```
+
+## 7. Results
+
+The AI successfully achieves its goal: it never loses. The minimax algorithm guarantees optimal play, and alpha‑beta pruning ensures that the decision time is negligible. The user interface is straightforward and intuitive, providing clear feedback. The game reliably detects wins and draws and announces the correct outcome.
+
+## 8. Conclusion
+
+This project demonstrates the practical application of adversarial search algorithms in a simple game environment. The Minimax algorithm, enhanced with Alpha‑Beta pruning, produces an unbeatable AI that responds instantly. The implementation is concise, well‑structured, and can serve as a foundation for exploring more complex games such as Connect Four or Chess.
+
+Future improvements could include:
+
+- Adding a graphical user interface (GUI) using Tkinter or Pygame.
+- Allowing the user to choose who goes first.
+- Implementing difficulty levels by limiting the AI’s search depth.
+
+## 9. References
+
+1. Russell, S., & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach* (4th ed.). Pearson.
+2. Minimax algorithm – Wikipedia: [https://en.wikipedia.org/wiki/Minimax](https://en.wikipedia.org/wiki/Minimax)
+3. Alpha‑beta pruning – Wikipedia: [https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
+
+---
+
+**Project Files Included:**
+
+- `tictactoe.py` – Full source code (provided separately).
+- `README.md` – Setup and usage instructions.
+- `problem_statement.md` – Detailed problem description.
+
+All files are available in the project repository.
